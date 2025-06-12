@@ -32,6 +32,11 @@ AC_ARG_WITH([rst2man],
     [RST2MAN="$withval"],
     [AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py], [])])
 
+m4_ifndef([VARNISH_PREREQ], AC_MSG_ERROR([Need varnish.m4 -- see README.rst]))
+
+#VARNISH_PREREQ([5.0], [5.1])
+VARNISH_VMODS([utils])
+
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
 
