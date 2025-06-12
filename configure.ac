@@ -34,6 +34,12 @@ AC_ARG_WITH([rst2man],
 
 m4_ifndef([VARNISH_PREREQ], AC_MSG_ERROR([Need varnish.m4 -- see README.rst]))
 
+AC_ARG_VAR([VARNISHSRC], [path to Varnish source tree (mandatory)])
+if test "x$VARNISHSRC" = x; then
+	AC_MSG_ERROR([No Varnish source tree specified])
+fi
+VARNISHSRC=`cd $VARNISHSRC && pwd`
+
 #VARNISH_PREREQ([5.0], [5.1])
 VARNISH_VMODS([utils])
 
