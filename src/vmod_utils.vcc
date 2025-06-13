@@ -1,5 +1,5 @@
 
-$Module utils 'Utils VMOD'
+$Module utils 2 'Utils VMOD'
 
 $Function STRING hostname(PRIV_VCL)
 $Function STRING timestamp()
