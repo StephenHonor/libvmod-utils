@@ -1,6 +1,7 @@
 AM_CFLAGS = $(VARNISHAPI_CFLAGS) -Wall -Werror
 AM_LDFLAGS = $(VARNISHAPI_LIBS) $(VMOD_LDFLAGS)
 
+vmoddir = $(libdir)/varnish/vmod
 vmod_LTLIBRARIES = libvmod_utils.la
 
 libvmod_utils_la_SOURCES = \
