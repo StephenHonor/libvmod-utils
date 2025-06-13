@@ -1,76 +1,32 @@
-AC_PREREQ(2.59)
+AC_PREREQ([2.68])
+AC_INIT([libvmod-utils], [0.1], [], [vmod-utils])
 AC_COPYRIGHT([Copyright (c) 2011 Varnish Software AS])
-AC_INIT([libvmod-utils], [trunk])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_SRCDIR(src/vmod_utils.vcc)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADER([config.h])
 
-AC_CANONICAL_SYSTEM
-AC_LANG(C)
+AM_INIT_AUTOMAKE([1.12 -Wall -Werror foreign parallel-tests])
+AM_SILENT_RULES([yes])
+AM_PROG_AR
 
-AM_INIT_AUTOMAKE([foreign])
+AC_ARG_WITH([rst2man],
+	[AS_HELP_STRING(
+		[--with-rst2man=PATH],
+		[Location of rst2man (auto)])],
+	[RST2MAN="$withval"],
+	[AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py], [])])
 
-AC_GNU_SOURCE
-AC_PROG_CC
-AC_PROG_CC_STDC
-if test "x$ac_cv_prog_cc_c99" = xno; then
-	AC_MSG_ERROR([Could not find a C99 compatible compiler])
-fi
-AC_PROG_CPP
 
-AC_PROG_INSTALL
-AC_PROG_LIBTOOL
-AC_PROG_MAKE_SET
+m4_ifndef([VARNISH_PREREQ], AC_MSG_ERROR([Need varnish.m4 -- see README.rst]))
+VARNISH_PREREQ([7.7])
+VARNISH_VMODS([utils])
 
-# Check for rst utilities
-AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py], "no")
-if test "x$RST2MAN" = "xno"; then
-	AC_MSG_WARN([rst2man not found - not building man pages])
-fi
-AM_CONDITIONAL(HAVE_RST2MAN, [test "x$RST2MAN" != "xno"])
+VMOD_TESTS="$(cd $srcdir/src && echo tests/*.vtc)"
+AC_SUBST(VMOD_TESTS)
 
-# Check for pkg-config
-PKG_PROG_PKG_CONFIG
-
-# Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([sys/stdlib.h])
-
-# Check for python
-AC_CHECK_PROGS(PYTHON, [python3 python3.1 python3.2 python2.7 python2.6 python2.5 python2 python], [AC_MSG_ERROR([Python is needed to build this vmod, please install python.])])
-
-# Varnish source tree
-AC_ARG_VAR([VARNISHSRC], [path to Varnish source tree (mandatory)])
-if test "x$VARNISHSRC" = x; then
-	AC_MSG_ERROR([No Varnish source tree specified])
-fi
-VARNISHSRC=`cd $VARNISHSRC && pwd`
-
-# Check Varnish version
-AC_CHECK_FILE([$VARNISHSRC/include/varnishapi.h],
-	[VARNISH2='yes'],
-	[VARNISH2='no']
-)
-AC_CHECK_FILE([$VARNISHSRC/include/vrt.h],
-	[VARNISH3='yes'],
-	[AC_MSG_FAILURE(["$VARNISHSRC" is not a Varnish source directory])]
-)
-AM_CONDITIONAL(VARNISH3, [test "x$VARNISH3" = "xyes"])
-
-# Check that varnishtest is built in the varnish source directory
-AC_CHECK_FILE([$VARNISHSRC/bin/varnishtest/varnishtest],
-	[],
-	[AC_MSG_FAILURE([Can't find "$VARNISHSRC/bin/varnishtest/varnishtest". Please build your varnish source directory])]
-)
-
-# vmod installation dir
-AC_ARG_VAR([VMODDIR], [vmod installation directory @<:@LIBDIR/varnish/vmods@:>@])
-if test "x$VMODDIR" = x; then
-	VMODDIR=`pkg-config --variable=vmoddir varnishapi`
-	if test "x$VMODDIR" = x; then
-		AC_MSG_FAILURE([Can't determine vmod installation directory])
-	fi
-fi
+PKG_CHECK_VAR([LIBVARNISHAPI_LIBDIR], [varnishapi], [libdir])
+AC_SUBST([VARNISH_LIBRARY_PATH],
+	[$LIBVARNISHAPI_LIBDIR:$LIBVARNISHAPI_LIBDIR/varnish])
 
 AC_CONFIG_FILES([
 	Makefile
