@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <sys/stat.h>
 #include <unistd.h>
 #include <limits.h>
@@ -14,7 +16,6 @@
 
 #include "vas.h"
 #include "vrt.h"
-#include "vcc_if.h"
 #include "bin/varnishd/cache.h"
 
 struct vmod_utils_data {
