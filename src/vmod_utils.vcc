@@ -1,7 +1,10 @@
-Module utils
-Init init_function
-Function STRING hostname(PRIV_VCL)
-Function STRING timestamp()
-Function REAL real(STRING, REAL)
-Function BOOL exists(STRING)
-Function IP ip(STRING, IP)
+
+
+$Module utils 'Utils VMOD'
+
+$Init init_function
+$Function STRING hostname(PRIV_VCL)
+$Function STRING timestamp()
+$Function REAL real(STRING, REAL)
+$Function BOOL exists(STRING)
+$Function IP ip(STRING, IP)
