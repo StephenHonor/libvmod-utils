@@ -1,8 +1,7 @@
-INCLUDES = -I$(VARNISHSRC)/include -I$(VARNISHSRC) -I$(VARNISHSRC)/bin/varnishd/
+AM_CFLAGS = $(VARNISHAPI_CFLAGS) -Wall -Werror
+AM_LDFLAGS = $(VARNISHAPI_LIBS) $(VMOD_LDFLAGS)
 
-if VARNISH3
-INCLUDES+=-I$(VARNISHSRC)/bin/varnishd/cache
-endif
+vmod_LTLIBRARIES = libvmod_utils.la
 
 vmoddir = $(VMODDIR)
 vmod_LTLIBRARIES = libvmod_utils.la
@@ -16,13 +15,18 @@ nodist_libvmod_utils_la_SOURCES = \
 	vcc_utils_if.c \
 	vcc_utils_if.h
 
-VMOD_TESTS = tests/*.vtc
-.PHONY: $(VMOD_TESTS)
+dist_man_MANS = vmod_utils.3
 
-tests/*.vtc:
-	$(VARNISHSRC)/bin/varnishtest/varnishtest -l -Dvarnishd=$(VARNISHSRC)/bin/varnishd/varnishd -Dvmod_topbuild=$(abs_top_builddir) $@
+@BUILD_VMOD_UTILS@
 
-check: $(VMOD_TESTS)
+AM_TESTS_ENVIRONMENT = \
+	PATH="$(VMOD_TEST_PATH)" \
+	LD_LIBRARY_PATH="$(VARNISH_LIBRARY_PATH)"
+TEST_EXTENSIONS = .vtc
+VTC_LOG_COMPILER = varnishtest -v
+AM_VTC_LOG_FLAGS = -Dvmod_utils="$(VMOD_PARSEFORM)"
+
+TESTS = @VMOD_TESTS@
 
 EXTRA_DIST = \
 	vmod_utils.vcc \
