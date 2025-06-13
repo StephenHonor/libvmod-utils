@@ -16,7 +16,7 @@
 
 #include "vas.h"
 #include "vrt.h"
-#include "bin/varnishd/cache.h"
+#include "vcc_utils_if.h"
 
 struct vmod_utils_data {
 	char* hostname;
