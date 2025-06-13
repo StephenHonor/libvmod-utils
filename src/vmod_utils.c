@@ -22,7 +22,7 @@ struct vmod_utils_data {
     char* hostname;
 };
 
-void utils_free(void* priv)
+static void utils_free(VRT_CTX, void* priv)
 {
     struct vmod_utils_data* data = (struct vmod_utils_data*)priv;
 
