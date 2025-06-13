@@ -12,9 +12,9 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#include <cache/cache_varnishd.h>
 #include "vas.h"
 #include "vrt.h"
-#include "bin/varnishd/cache.h"
 
 int
 init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
