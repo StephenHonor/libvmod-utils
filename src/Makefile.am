@@ -23,5 +23,3 @@ check: $(VMOD_TESTS)
 EXTRA_DIST = \
 	vmod_utils.vcc \
 	$(VMOD_TESTS)
-
-CLEANFILES = $(builddir)/vcc_if.c $(builddir)/vcc_if.h
