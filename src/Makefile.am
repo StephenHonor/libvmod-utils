@@ -3,11 +3,6 @@ AM_LDFLAGS = $(VARNISHAPI_LIBS) $(VMOD_LDFLAGS)
 
 vmod_LTLIBRARIES = libvmod_utils.la
 
-vmoddir = $(VMODDIR)
-vmod_LTLIBRARIES = libvmod_utils.la
-
-libvmod_utils_la_LDFLAGS = -module -export-dynamic -avoid-version
-
 libvmod_utils_la_SOURCES = \
 	vmod_utils.c
 
