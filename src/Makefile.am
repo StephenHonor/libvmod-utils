@@ -10,12 +10,7 @@ vmod_LTLIBRARIES = libvmod_utils.la
 libvmod_utils_la_LDFLAGS = -module -export-dynamic -avoid-version
 
 libvmod_utils_la_SOURCES = \
-	vcc_if.c \
-	vcc_if.h \
 	vmod_utils.c
-
-vcc_if.c vcc_if.h: $(VARNISHSRC)/lib/libvmod_std/vmod.py $(top_srcdir)/src/vmod_utils.vcc
-	@PYTHON@ $(VARNISHSRC)/lib/libvmod_std/vmod.py $(top_srcdir)/src/vmod_utils.vcc
 
 VMOD_TESTS = tests/*.vtc
 .PHONY: $(VMOD_TESTS)
