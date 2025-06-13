@@ -1,6 +1,8 @@
 #include <sys/stat.h>
 #include <limits.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
 #include <ctype.h>
@@ -12,6 +14,7 @@
 #include <cache/cache_varnishd.h>
 #include "vas.h"
 #include "vrt.h"
+#include "bin/varnishd/cache.h"
 
 int
 init_function(struct vmod_priv *priv, const struct VCL_conf *conf)

@@ -32,10 +32,6 @@ AM_CONDITIONAL(HAVE_RST2MAN, [test "x$RST2MAN" != "xno"])
 # Check for pkg-config
 PKG_PROG_PKG_CONFIG
 
-# Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([sys/stdlib.h])
-
 # Check for python
 AC_CHECK_PROGS(PYTHON, [python3 python3.1 python3.2 python2.7 python2.6 python2.5 python2 python], [AC_MSG_ERROR([Python is needed to build this vmod, please install python.])])
 
