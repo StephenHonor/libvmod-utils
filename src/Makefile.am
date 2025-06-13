@@ -10,9 +10,11 @@ vmod_LTLIBRARIES = libvmod_utils.la
 libvmod_utils_la_LDFLAGS = -module -export-dynamic -avoid-version
 
 libvmod_utils_la_SOURCES = \
-	vcc_if.c \
-	vcc_if.h \
 	vmod_utils.c
+
+nodist_libvmod_utils_la_SOURCES = \
+	vcc_utils_if.c \
+	vcc_utils_if.h
 
 VMOD_TESTS = tests/*.vtc
 .PHONY: $(VMOD_TESTS)
