@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#include <cache/cache_varnishd.h>
 #include "vas.h"
 #include "vrt.h"
 #include "vcc_utils_if.h"
