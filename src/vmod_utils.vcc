@@ -1,7 +1,6 @@
 
 $Module utils 'Utils VMOD'
 
-$Init init_function
 $Function STRING hostname(PRIV_VCL)
 $Function STRING timestamp()
 $Function REAL real(STRING, REAL)

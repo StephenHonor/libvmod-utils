@@ -1,10 +1,15 @@
+#define _GNU_SOURCE
+
 #include "config.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "cache/cache.h"
 
 #include <sys/stat.h>
 #include <unistd.h>
 #include <limits.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <errno.h>
 #include <string.h>
 #include <syslog.h>
@@ -23,6 +28,39 @@ struct vmod_utils_data {
 	char* hostname;
 };
 
+void utils_free(void* priv)
+{
+	struct vmod_utils_data* data = (struct vmod_utils_data*)priv;
+
+#define freez(x) do { if (x) free(x); x = NULL; } while (0);
+	freez(data->hostname);
+	freez(data);
+#undef freez
+}
+
+static const struct vmod_priv_methods priv_task_methods[1] = {{
+    .magic = VMOD_PRIV_METHODS_MAGIC,
+    .type = "vmod_utils_priv_task",
+    .fini = utils_free
+}};
+
+int
+vmod_event_function(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
+{
+	switch (e) {
+        case VCL_EVENT_LOAD:
+            if (priv->priv == NULL) {
+                priv->priv = utils_init();
+                priv->methods = priv_task_methods;
+            }
+            break;
+        default:
+            break;
+	}
+
+	return (0);
+}
+
 void* utils_init()
 {
 	struct vmod_utils_data* data = malloc(sizeof(struct vmod_utils_data));
@@ -38,23 +76,9 @@ void* utils_init()
 	return (void*)data;
 }
 
-void utils_free(void* priv)
-{
-	struct vmod_utils_data* data = (struct vmod_utils_data*)priv;
-
-#define freez(x) do { if (x) free(x); x = NULL; } while (0);
-	freez(data->hostname);
-	freez(data);
-#undef freez
-}
-
 int
 init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
 {
-	if(priv->priv == NULL) {
-		priv->priv = utils_init();
-		priv->free = utils_free;
-	}
 	return (0);
 }
 
